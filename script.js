@@ -1,75 +1,30 @@
-// Comprehensive list of all events, times, and placeholders for student data
+// Comprehensive list of events, times, and placeholders for student data
 const events = [
   {
     type: "Shot Putt",
     events: [
-      { category: "U7 Girls", time: "2024-11-20T08:30:00", students: [] },
-      { category: "U7 Boys", time: "2024-11-20T08:30:00", students: [] },
-      { category: "U9 Girls", time: "2024-11-20T09:00:00", students: [] },
-      { category: "U9 Boys", time: "2024-11-20T09:00:00", students: [] },
-      { category: "U11 Girls", time: "2024-11-20T09:30:00", students: [] },
-      { category: "U11 Boys", time: "2024-11-20T09:30:00", students: [] },
-      { category: "U13 Girls", time: "2024-11-20T10:00:00", students: [] },
-      { category: "U13 Boys", time: "2024-11-20T10:00:00", students: [] },
-      { category: "U15 Girls", time: "2024-11-20T10:15:00", students: [] },
-      { category: "U15 Boys", time: "2024-11-20T10:15:00", students: [] },
+      { category: "U7 Girls", time: "08:30", students: [] },
+      { category: "U7 Boys", time: "08:30", students: [] },
+      { category: "U9 Girls", time: "09:00", students: [] },
+      { category: "U9 Boys", time: "09:00", students: [] },
+      { category: "U11 Girls", time: "09:30", students: [] },
+      { category: "U11 Boys", time: "09:30", students: [] },
+      { category: "U13 Girls", time: "10:00", students: [] },
+      { category: "U13 Boys", time: "10:00", students: [] },
+      { category: "U15 Girls", time: "10:15", students: [] },
+      { category: "U15 Boys", time: "10:15", students: [] },
     ],
   },
-  {
-    type: "Long Jump",
-    events: [
-      { category: "U7 Girls", time: "2024-11-20T08:30:00", students: [] },
-      { category: "U7 Boys", time: "2024-11-20T08:30:00", students: [] },
-      { category: "U9 Girls", time: "2024-11-20T09:00:00", students: [] },
-      { category: "U9 Boys", time: "2024-11-20T09:00:00", students: [] },
-      { category: "U11 Girls", time: "2024-11-20T09:30:00", students: [] },
-      { category: "U11 Boys", time: "2024-11-20T09:30:00", students: [] },
-      { category: "U13 Girls", time: "2024-11-20T10:00:00", students: [] },
-      { category: "U13 Boys", time: "2024-11-20T10:00:00", students: [] },
-      { category: "U15 Girls", time: "2024-11-20T10:15:00", students: [] },
-      { category: "U15 Boys", time: "2024-11-20T10:15:00", students: [] },
-    ],
-  },
-  {
-    type: "Javelin",
-    events: [
-      { category: "U7 Girls", time: "2024-11-20T10:30:00", students: [] },
-      { category: "U7 Boys", time: "2024-11-20T10:30:00", students: [] },
-      { category: "U9 Girls", time: "2024-11-20T11:00:00", students: [] },
-      { category: "U9 Boys", time: "2024-11-20T11:00:00", students: [] },
-      { category: "U11 Girls", time: "2024-11-20T11:30:00", students: [] },
-      { category: "U11 Boys", time: "2024-11-20T11:30:00", students: [] },
-      { category: "U13 Girls", time: "2024-11-20T12:00:00", students: [] },
-      { category: "U13 Boys", time: "2024-11-20T12:00:00", students: [] },
-      { category: "U15 Girls", time: "2024-11-20T12:15:00", students: [] },
-      { category: "U15 Boys", time: "2024-11-20T12:15:00", students: [] },
-    ],
-  },
-  {
-    type: "Triple Jump",
-    events: [
-      { category: "U7 Girls", time: "2024-11-20T10:30:00", students: [] },
-      { category: "U7 Boys", time: "2024-11-20T10:30:00", students: [] },
-      { category: "U9 Girls", time: "2024-11-20T11:00:00", students: [] },
-      { category: "U9 Boys", time: "2024-11-20T11:00:00", students: [] },
-      { category: "U11 Girls", time: "2024-11-20T11:30:00", students: [] },
-      { category: "U11 Boys", time: "2024-11-20T11:30:00", students: [] },
-      { category: "U13 Girls", time: "2024-11-20T12:00:00", students: [] },
-      { category: "U13 Boys", time: "2024-11-20T12:00:00", students: [] },
-      { category: "U15 Girls", time: "2024-11-20T12:15:00", students: [] },
-      { category: "U15 Boys", time: "2024-11-20T12:15:00", students: [] },
-    ],
-  },
-  // Add track events (800m, 600m, etc.) in similar structure
+  // Add more event types (Long Jump, Javelin, etc.) similarly
 ];
 
-// JavaScript logic for handling interactivity
 let openEventType = null;
 let openSubEvent = null;
 
+// Display all event types
 function displayEvents() {
   const eventsList = document.getElementById("eventsList");
-  eventsList.innerHTML = ""; // Clear previous content
+  eventsList.innerHTML = ""; // Clear existing content
 
   events.forEach((eventType, typeIndex) => {
     const header = document.createElement("h2");
@@ -80,13 +35,16 @@ function displayEvents() {
   });
 }
 
+// Toggle sub-events for a specific event type
 function toggleEventType(typeIndex) {
   const eventType = events[typeIndex];
   const eventsList = document.getElementById("eventsList");
 
+  // Remove any existing sub-event lists
   const existingSubEventList = document.querySelector(".sub-event-list");
   if (existingSubEventList) existingSubEventList.remove();
 
+  // Close the list if the same event type is clicked
   if (openEventType === typeIndex) {
     openEventType = null;
     return;
@@ -99,8 +57,19 @@ function toggleEventType(typeIndex) {
 
   eventType.events.forEach((event, eventIndex) => {
     const subEventItem = document.createElement("li");
-    subEventItem.textContent = `${event.category} - ${new Date(event.time).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
+    subEventItem.textContent = `${event.category} - ${event.time}`;
     subEventItem.classList.add("sub-event-item");
+
+    // Compare event time against current time (ignoring date)
+    const now = new Date();
+    const [eventHour, eventMinute] = event.time.split(":").map(Number);
+    const eventTime = new Date();
+    eventTime.setHours(eventHour, eventMinute, 0, 0);
+
+    if (now > eventTime) {
+      subEventItem.classList.add("crossed-out");
+    }
+
     subEventItem.addEventListener("click", (e) => {
       e.stopPropagation();
       toggleSubEvent(typeIndex, eventIndex);
@@ -112,6 +81,7 @@ function toggleEventType(typeIndex) {
   headers[typeIndex].after(subEventList);
 }
 
+// Toggle student list for a sub-event
 function toggleSubEvent(typeIndex, eventIndex) {
   const event = events[typeIndex].events[eventIndex];
   const subEventItems = document.querySelectorAll(".sub-event-item");
@@ -144,4 +114,5 @@ function toggleSubEvent(typeIndex, eventIndex) {
   subEventItems[eventIndex].after(studentList);
 }
 
+// Initialize the event display
 window.onload = displayEvents;
