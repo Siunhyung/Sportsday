@@ -326,6 +326,22 @@ function toggleSubEvent(typeIndex, eventIndex) {
 }
 
 
+function highlightCurrentEvents() {
+  const now = new Date();
+  document.querySelectorAll('.event').forEach(event => {
+    const [hour, minute] = event.dataset.time.split(':').map(Number);
+    const eventTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hour, minute);
+    const diff = eventTime - now;
+
+    if (diff > 0 && diff <= 15 * 60 * 1000) { // Within 15 minutes
+      event.classList.add('current-event');
+    } else {
+      event.classList.remove('current-event');
+    }
+  });
+}
+
+setInterval(highlightCurrentEvents, 60000); // Update every minute
 
 
 
