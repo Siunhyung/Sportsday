@@ -1,77 +1,40 @@
-/* General Reset */
 body {
-  margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #f4f4f9;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
+
+.container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  background: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+h1 {
+  text-align: center;
   color: #333;
 }
 
-/* Header Styling */
-header {
-  background-color: #002147;
-  color: #fff;
-  text-align: center;
-  padding: 10px 0;
-}
-
-header h1 {
-  margin: 0;
-  font-size: 1.5em;
-}
-
-/* Main Section Styling */
-main {
-  padding: 10px;
-}
-
-#event-list,
-#student-list {
-  list-style: none;
+ul {
+  list-style-type: none;
   padding: 0;
-  margin: 0;
 }
 
-#event-list li,
-#student-list li {
-  background: #fff;
-  padding: 15px;
-  margin: 10px 0;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
+li {
+  font-size: 18px;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
 }
 
-#event-list li:hover {
-  background: #f0f8ff;
+li:last-child {
+  border-bottom: none;
 }
 
-#event-list li.past {
+.crossed-out {
   text-decoration: line-through;
-  color: #999;
-  background: #f0f0f0;
-}
-
-#student-list li {
-  padding: 10px;
-  font-size: 0.9em;
-}
-
-#event-list li span.time {
-  font-size: 0.9em;
-  color: #555;
-}
-
-/* Footer Styling */
-footer {
-  text-align: center;
-  background-color: #002147;
-  color: white;
-  padding: 10px;
-  position: fixed;
-  width: 100%;
-  bottom: 0;
+  color: gray;
 }
