@@ -3,36 +3,23 @@ const events = [
   {
     type: "Shot Putt",
     events: [
-      { category: "U7 Girls", time: "2024-11-20T08:30:00" },
-      { category: "U7 Boys", time: "2024-11-20T08:30:00" },
-      { category: "U9 Girls", time: "2024-11-20T09:00:00" },
-      { category: "U9 Boys", time: "2024-11-20T09:00:00" },
-      { category: "U11 Girls", time: "2024-11-20T09:30:00" },
-      { category: "U11 Boys", time: "2024-11-20T09:30:00" },
-      { category: "U13 Girls", time: "2024-11-20T10:00:00" },
-      { category: "U13 Boys", time: "2024-11-20T10:00:00" },
-      { category: "U15 Girls", time: "2024-11-20T10:15:00" },
-      { category: "U15 Boys", time: "2024-11-20T10:15:00" },
+      { category: "U7 Girls", time: "2024-11-20T08:30:00", students: [{ name: "Alice", performance: "3.2m" }, { name: "Bob", performance: "3.0m" }] },
+      { category: "U7 Boys", time: "2024-11-20T08:30:00", students: [{ name: "Charlie", performance: "3.5m" }, { name: "David", performance: "3.1m" }] },
+      // Add more categories as needed
     ],
   },
   {
     type: "Long Jump",
     events: [
-      { category: "U7 Girls", time: "2024-11-20T08:30:00" },
-      { category: "U7 Boys", time: "2024-11-20T08:30:00" },
-      { category: "U9 Girls", time: "2024-11-20T09:00:00" },
-      { category: "U9 Boys", time: "2024-11-20T09:00:00" },
-      { category: "U11 Girls", time: "2024-11-20T09:30:00" },
-      { category: "U11 Boys", time: "2024-11-20T09:30:00" },
-      { category: "U13 Girls", time: "2024-11-20T10:00:00" },
-      { category: "U13 Boys", time: "2024-11-20T10:00:00" },
-      { category: "U15 Girls", time: "2024-11-20T10:15:00" },
-      { category: "U15 Boys", time: "2024-11-20T10:15:00" },
+      { category: "U7 Girls", time: "2024-11-20T08:30:00", students: [{ name: "Eve", performance: "1.8m" }, { name: "Frank", performance: "1.6m" }] },
+      { category: "U7 Boys", time: "2024-11-20T08:30:00", students: [{ name: "Grace", performance: "1.9m" }, { name: "Henry", performance: "1.7m" }] },
+      // Add more categories as needed
     ],
   },
 ];
 
-let openCategory = null; // To track the currently open category
+// Currently open event tracking
+let openCategory = null;
 
 // Function to display events with headers and sub-events
 function displayEvents() {
@@ -86,22 +73,16 @@ function toggleStudentList(typeIndex, eventIndex) {
   // Set the current category as open
   openCategory = `${typeIndex}-${eventIndex}`;
 
-  // Fetch and display student data (dummy data for now)
-  const students = [
-    { name: "Alice", performance: "12.5s" },
-    { name: "Bob", performance: "13.1s" },
-  ]; // Replace with real data fetching logic
-
   // Create the student list
   const studentList = document.createElement("ul");
   studentList.classList.add("student-list");
 
-  if (students.length === 0) {
+  if (!event.students || event.students.length === 0) {
     const noStudents = document.createElement("li");
     noStudents.textContent = "No students participated.";
     studentList.appendChild(noStudents);
   } else {
-    students.forEach((student) => {
+    event.students.forEach((student) => {
       const studentItem = document.createElement("li");
       studentItem.textContent = `${student.name} - ${student.performance}`;
       studentList.appendChild(studentItem);
@@ -110,7 +91,7 @@ function toggleStudentList(typeIndex, eventIndex) {
 
   // Insert the student list after the clicked event
   const eventItems = document.querySelectorAll(".event-item");
-  eventItems[eventIndex].after(studentList);
+  eventItems[Array.from(eventItems).findIndex((el) => el.textContent.includes(event.category))].after(studentList);
 }
 
 // Call the function when the page loads
