@@ -1,42 +1,78 @@
 // List of events and their times
 const events = [
-  { name: "100m Dash", time: "2024-11-20T09:00:00", students: [{ name: "Alice", time: "12.5s" }, { name: "Bob", time: "13.1s" }] },
-  { name: "200m Relay", time: "2024-11-20T10:00:00", students: [{ name: "Charlie", time: "25.8s" }, { name: "Diana", time: "24.3s" }] },
-  { name: "High Jump", time: "2024-11-20T11:30:00", students: [{ name: "Eve", time: "1.8m" }, { name: "Frank", time: "1.9m" }] },
-  { name: "Lunch Break", time: "2024-11-20T12:30:00", students: [] },
-  { name: "Long Jump", time: "2024-11-20T14:00:00", students: [{ name: "Grace", time: "5.6m" }, { name: "Hank", time: "5.9m" }] },
-  { name: "400m Relay", time: "2024-11-20T15:30:00", students: [{ name: "Ivy", time: "55.4s" }, { name: "Jack", time: "54.1s" }] },
+  {
+    type: "Shot Putt",
+    events: [
+      { category: "U7 Girls", time: "2024-11-20T08:30:00" },
+      { category: "U7 Boys", time: "2024-11-20T08:30:00" },
+      { category: "U9 Girls", time: "2024-11-20T09:00:00" },
+      { category: "U9 Boys", time: "2024-11-20T09:00:00" },
+      { category: "U11 Girls", time: "2024-11-20T09:30:00" },
+      { category: "U11 Boys", time: "2024-11-20T09:30:00" },
+      { category: "U13 Girls", time: "2024-11-20T10:00:00" },
+      { category: "U13 Boys", time: "2024-11-20T10:00:00" },
+      { category: "U15 Girls", time: "2024-11-20T10:15:00" },
+      { category: "U15 Boys", time: "2024-11-20T10:15:00" },
+    ],
+  },
+  {
+    type: "Long Jump",
+    events: [
+      { category: "U7 Girls", time: "2024-11-20T08:30:00" },
+      { category: "U7 Boys", time: "2024-11-20T08:30:00" },
+      { category: "U9 Girls", time: "2024-11-20T09:00:00" },
+      { category: "U9 Boys", time: "2024-11-20T09:00:00" },
+      { category: "U11 Girls", time: "2024-11-20T09:30:00" },
+      { category: "U11 Boys", time: "2024-11-20T09:30:00" },
+      { category: "U13 Girls", time: "2024-11-20T10:00:00" },
+      { category: "U13 Boys", time: "2024-11-20T10:00:00" },
+      { category: "U15 Girls", time: "2024-11-20T10:15:00" },
+      { category: "U15 Boys", time: "2024-11-20T10:15:00" },
+    ],
+  },
 ];
 
-// Currently open event
-let openEvent = null;
+
+// Currently open category
+let openCategory = null;
 
 // Function to display events
 function displayEvents() {
   const eventsList = document.getElementById("eventsList");
+  eventsList.innerHTML = ""; // Clear existing content
+
   const now = new Date();
 
-  events.forEach((event, index) => {
-    const eventTime = new Date(event.time);
-    const listItem = document.createElement("li");
-    listItem.classList.add("event-item");
-    listItem.textContent = `${event.name} - ${eventTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+  events.forEach((eventType, typeIndex) => {
+    // Add event type as a header
+    const header = document.createElement("h2");
+    header.textContent = eventType.type;
+    header.classList.add("event-header");
+    eventsList.appendChild(header);
 
-    // Add a crossed-out class if the event time has passed
-    if (now > eventTime) {
-      listItem.classList.add("crossed-out");
-    }
+    // Add sub-events for the event type
+    eventType.events.forEach((event, eventIndex) => {
+      const eventTime = new Date(event.time);
+      const listItem = document.createElement("li");
+      listItem.classList.add("event-item");
+      listItem.textContent = `${event.category} - ${eventTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
 
-    // Click event to toggle student list
-    listItem.addEventListener("click", () => toggleStudentList(index));
+      // Add a crossed-out class if the event time has passed
+      if (now > eventTime) {
+        listItem.classList.add("crossed-out");
+      }
 
-    eventsList.appendChild(listItem);
+      // Click event to toggle student list (if needed)
+      listItem.addEventListener("click", () => toggleStudentList(typeIndex, eventIndex));
+      eventsList.appendChild(listItem);
+    });
   });
 }
 
-// Function to toggle student list
-function toggleStudentList(index) {
-  const event = events[index];
+// Function to toggle student list for a specific sub-event
+function toggleStudentList(typeIndex, eventIndex) {
+  const eventType = events[typeIndex];
+  const event = eventType.events[eventIndex];
   const eventsList = document.getElementById("eventsList");
 
   // Remove any existing student lists
@@ -44,33 +80,39 @@ function toggleStudentList(index) {
   if (existingList) existingList.remove();
 
   // If the same event is clicked again, close the list
-  if (openEvent === index) {
-    openEvent = null;
+  if (openCategory === `${typeIndex}-${eventIndex}`) {
+    openCategory = null;
     return;
   }
 
-  // Set the current event as open
-  openEvent = index;
+  // Set the current category as open
+  openCategory = `${typeIndex}-${eventIndex}`;
+
+  // Fetch and display student data (dummy data for now)
+  const students = [
+    { name: "Alice", performance: "12.5s" },
+    { name: "Bob", performance: "13.1s" },
+  ]; // Replace with real data fetching logic
 
   // Create the student list
   const studentList = document.createElement("ul");
   studentList.classList.add("student-list");
 
-  if (event.students.length === 0) {
+  if (students.length === 0) {
     const noStudents = document.createElement("li");
     noStudents.textContent = "No students participated.";
     studentList.appendChild(noStudents);
   } else {
-    event.students.forEach((student) => {
+    students.forEach((student) => {
       const studentItem = document.createElement("li");
-      studentItem.textContent = `${student.name} - ${student.time}`;
+      studentItem.textContent = `${student.name} - ${student.performance}`;
       studentList.appendChild(studentItem);
     });
   }
 
   // Insert the student list after the clicked event
   const eventItems = document.querySelectorAll(".event-item");
-  eventItems[index].after(studentList);
+  eventItems[eventIndex].after(studentList);
 }
 
 // Call the function when the page loads
