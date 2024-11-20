@@ -7,6 +7,13 @@ body {
   color: #333;
 }
 
+/* Sliding Animations */
+.sub-event-list,
+.student-list {
+  overflow: hidden; /* Ensures smooth transitions */
+  transition: height 0.3s ease-out;
+}
+
 /* Header Section */
 header {
   background-color: #35387d; /* Blue background color */
@@ -30,27 +37,31 @@ header .logo {
   list-style: none;
 }
 
-/* Event Headers (e.g., Shot Putt, Long Jump) */
+/* Event Headers */
 .event-header {
   font-size: 20px;
   font-weight: bold;
   margin-top: 20px;
+  padding: 10px 20px;
+  margin: 10px 0;
+  border: 2px solid #35387d; /* Add a border */
+  border-radius: 5px; /* Optional: Rounded corners */
+  background-color: #f8f9fa; /* Light background for contrast */
   color: #35387d;
+  font-size: 18px;
+  font-weight: bold;
   cursor: pointer;
   transition: color 0.2s ease-in-out;
+  transition: all 0.3s ease; /* Smooth hover effect */
 }
 
 .event-header:hover {
   color: #007bff;
+  background-color: #35387d; /* Darker background on hover */
+  color: white; /* Invert text color */
 }
 
-/* Sub-Event List (e.g., U7 Girls, U7 Boys) */
-.sub-event-list {
-  margin-left: 20px;
-  padding-left: 20px;
-  border-left: 2px solid #ddd;
-}
-
+/* Sub-Event Items */
 .sub-event-item {
   font-size: 18px;
   margin: 10px 0;
@@ -62,26 +73,33 @@ header .logo {
   color: #007bff;
 }
 
-/* Crossed-Out Events (if the time has passed) */
+/* Crossed-Out Events */
 .crossed-out {
   text-decoration: line-through;
   color: gray;
 }
 
 /* Student List */
-.student-list {
-  margin-left: 40px;
-  padding-left: 20px;
-  border-left: 2px dashed #ddd;
-  list-style-type: disc;
+/* Styling the student list items */
+.student-list li {
+  margin: 5px 0;
   font-size: 16px;
   color: #555;
+  display: flex; /* Use flexbox for alignment */
+  justify-content: space-between; /* Space out name and performance */
+  padding: 5px 10px;
+  border-bottom: 1px solid #ddd; /* Optional: Add a divider */
 }
 
 .student-list li {
   margin: 5px 0;
+.student-name {
+  font-weight: bold; /* Highlight the name */
 }
 
+.student-performance {
+  color: #555; /* Make the performance visually distinct */
+}
 /* Footer */
 footer {
   text-align: center;
