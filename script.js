@@ -151,23 +151,16 @@ function parseCSV(data) {
   const rows = data.split("\n");
   const headers = rows[0].split(",");
 
-  const parsedData = rows.slice(1).map((row) => {
+  return rows.slice(1).map((row) => {
     const values = row.split(",");
     const entry = {};
     headers.forEach((header, index) => {
-      entry[header.trim()] = values[index]?.trim() || ""; // Handle missing values
+      entry[header.trim()] = values[index]?.trim() || ""; // Fill missing fields with an empty string
     });
-
-    // Return the entry only if it has all required fields
-    if (Object.values(entry).every((value) => value !== "")) {
-      return entry;
-    }
-    return null; // Mark invalid rows as null
+    return entry; // Return entry even if some fields are empty
   });
-
-  // Filter out null entries (empty rows)
-  return parsedData.filter((entry) => entry !== null);
 }
+
 
 // Update events with student data from Google Sheets
 async function updateEventsWithData() {
@@ -176,22 +169,41 @@ async function updateEventsWithData() {
   studentData.forEach((entry) => {
     const { "Event Type": eventType, Category, "Student Name": studentName, Performance } = entry;
 
-    if (eventType && Category && studentName && Performance) {
+    if (eventType && Category) {
       const eventTypeObj = events.find((event) => event.type === eventType);
       if (eventTypeObj) {
         const categoryObj = eventTypeObj.events.find((event) => event.category === Category);
         if (categoryObj) {
-          // Add unit if it exists
-          const performanceWithUnit = eventTypeObj.unit
-            ? `${Performance} ${eventTypeObj.unit}`
-            : Performance;
+          // Add the student's name if not already present
+          if (studentName) {
+            const existingStudent = categoryObj.students.find(
+              (student) => student.name === studentName
+            );
+            if (!existingStudent) {
+              categoryObj.students.push({ name: studentName, performance: "" });
+            }
+          }
 
-          categoryObj.students.push({ name: studentName, performance: performanceWithUnit });
+          // Update performance for an existing student
+          if (Performance) {
+            const studentToUpdate = categoryObj.students.find(
+              (student) => student.name === studentName
+            );
+            if (studentToUpdate) {
+              const performanceWithUnit = eventTypeObj.unit
+                ? `${Performance} ${eventTypeObj.unit}`
+                : Performance;
+              studentToUpdate.performance = performanceWithUnit;
+            }
+          }
         }
       }
     }
   });
+
+  console.log("Updated Events with Data:", events); // For debugging
 }
+
 
 
 
@@ -332,7 +344,7 @@ function searchStudentEvents(studentName) {
             eventType: eventType.type,
             category: event.category,
             time: event.time,
-            performance: student.performance || "N/A",
+            performance: student.performance || "Upcoming",
           });
         }
       });
@@ -340,6 +352,7 @@ function searchStudentEvents(studentName) {
   });
   return results;
 }
+
 
 function renderSearchResults(results) {
   searchResultsContainer.innerHTML = "";
