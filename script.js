@@ -289,7 +289,20 @@ function toggleSubEvent(typeIndex, eventIndex) {
   } else {
     event.students.forEach((student) => {
       const studentItem = document.createElement("li");
-      studentItem.textContent = `${student.name} - ${student.performance}`;
+
+      // Create a container for name and performance
+      const studentName = document.createElement("span");
+      studentName.textContent = student.name;
+      studentName.classList.add("student-name");
+
+      const studentPerformance = document.createElement("span");
+      studentPerformance.textContent = student.performance;
+      studentPerformance.classList.add("student-performance");
+
+      // Append name and performance into the student item
+      studentItem.appendChild(studentName);
+      studentItem.appendChild(studentPerformance);
+
       studentList.appendChild(studentItem);
     });
   }
@@ -302,6 +315,7 @@ function toggleSubEvent(typeIndex, eventIndex) {
     studentList.style.height = `${studentList.scrollHeight}px`;
   }, 0);
 }
+
 
 
 
