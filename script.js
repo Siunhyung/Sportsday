@@ -3,6 +3,7 @@ const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ3fjlsr4BAzZ-
 const events = [
   {
     type: "Shot Putt",
+    unit: "m",
     events: [
       { category: "U7 Girls", time: "08:30", students: [] },
       { category: "U7 Boys", time: "08:30", students: [] },
@@ -18,6 +19,7 @@ const events = [
   },
   {
     type: "Long Jump",
+    unit: "m",
     events: [
       { category: "U7 Girls", time: "08:30", students: [] },
       { category: "U7 Boys", time: "08:30", students: [] },
@@ -33,6 +35,7 @@ const events = [
   },
   {
     type: "Javelin",
+    unit: "m",
     events: [
       { category: "U7 Girls", time: "10:30", students: [] },
       { category: "U7 Boys", time: "10:30", students: [] },
@@ -48,6 +51,7 @@ const events = [
   },
   {
     type: "Triple Jump",
+    unit: "m",
     events: [
       { category: "U7 Girls", time: "10:30", students: [] },
       { category: "U7 Boys", time: "10:30", students: [] },
@@ -161,25 +165,24 @@ function parseCSV(data) {
 
 // Update events with student data from Google Sheets
 async function updateEventsWithData() {
-  const studentData = await fetchStudentData();
+  const studentData = await fetchAndCollateData();
 
   studentData.forEach((entry) => {
     const { "Event Type": eventType, Category, "Student Name": studentName, Performance } = entry;
 
-    // Ensure all required fields are present before processing
     if (eventType && Category && studentName && Performance) {
       const eventTypeObj = events.find((event) => event.type === eventType);
       if (eventTypeObj) {
         const categoryObj = eventTypeObj.events.find((event) => event.category === Category);
         if (categoryObj) {
-          categoryObj.students.push({ name: studentName, performance: Performance });
+          const performanceWithUnit = `${Performance} ${eventTypeObj.unit}`;
+          categoryObj.students.push({ name: studentName, performance: performanceWithUnit });
         }
       }
     }
   });
-
-  displayEvents(); // Re-render the updated events
 }
+
 
 
 
@@ -260,8 +263,8 @@ function toggleSubEvent(typeIndex, eventIndex) {
   const existingStudentList = document.querySelector(".student-list");
 
   if (existingStudentList) {
-    existingStudentList.style.height = "0px"; // Collapse animation
-    setTimeout(() => existingStudentList.remove(), 300); // Remove after animation
+    existingStudentList.style.height = "0px";
+    setTimeout(() => existingStudentList.remove(), 300);
   }
 
   if (openSubEvent === `${typeIndex}-${eventIndex}`) {
@@ -289,12 +292,12 @@ function toggleSubEvent(typeIndex, eventIndex) {
   const subEventItems = document.querySelectorAll(".sub-event-item");
   subEventItems[eventIndex].after(studentList);
 
-  // Add sliding animation
-  studentList.style.height = "0px"; // Start collapsed
+  studentList.style.height = "0px";
   setTimeout(() => {
-    studentList.style.height = `${studentList.scrollHeight}px`; // Expand
+    studentList.style.height = `${studentList.scrollHeight}px`;
   }, 0);
 }
+
 
 
 
