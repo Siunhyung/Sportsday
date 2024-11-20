@@ -1,4 +1,4 @@
-// List of events and their times
+// List of events with categories and times
 const events = [
   {
     type: "Shot Putt",
@@ -32,11 +32,9 @@ const events = [
   },
 ];
 
+let openCategory = null; // To track the currently open category
 
-// Currently open category
-let openCategory = null;
-
-// Function to display events
+// Function to display events with headers and sub-events
 function displayEvents() {
   const eventsList = document.getElementById("eventsList");
   eventsList.innerHTML = ""; // Clear existing content
@@ -62,7 +60,7 @@ function displayEvents() {
         listItem.classList.add("crossed-out");
       }
 
-      // Click event to toggle student list (if needed)
+      // Click event to toggle student list
       listItem.addEventListener("click", () => toggleStudentList(typeIndex, eventIndex));
       eventsList.appendChild(listItem);
     });
