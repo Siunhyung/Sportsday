@@ -146,16 +146,17 @@ function displayEvents() {
   });
 }
 
-// Toggle sub-events for a specific event type
+// Toggle sub-events for a specific event type with sliding animation
 function toggleEventType(typeIndex) {
   const eventType = events[typeIndex];
   const eventsList = document.getElementById("eventsList");
 
-  // Remove any existing sub-event lists
   const existingSubEventList = document.querySelector(".sub-event-list");
-  if (existingSubEventList) existingSubEventList.remove();
+  if (existingSubEventList) {
+    existingSubEventList.style.height = "0px"; // Collapse animation
+    setTimeout(() => existingSubEventList.remove(), 300); // Remove after animation
+  }
 
-  // Close the list if the same event type is clicked
   if (openEventType === typeIndex) {
     openEventType = null;
     return;
@@ -171,7 +172,7 @@ function toggleEventType(typeIndex) {
     subEventItem.textContent = `${event.category} - ${event.time}`;
     subEventItem.classList.add("sub-event-item");
 
-    // Compare event time against current time (ignoring date)
+    // Add cross-out logic for past events
     const now = new Date();
     const [eventHour, eventMinute] = event.time.split(":").map(Number);
     const eventTime = new Date();
@@ -185,20 +186,29 @@ function toggleEventType(typeIndex) {
       e.stopPropagation();
       toggleSubEvent(typeIndex, eventIndex);
     });
+
     subEventList.appendChild(subEventItem);
   });
 
   const headers = document.querySelectorAll(".event-header");
   headers[typeIndex].after(subEventList);
+
+  // Add sliding animation
+  subEventList.style.height = "0px"; // Start collapsed
+  setTimeout(() => {
+    subEventList.style.height = `${subEventList.scrollHeight}px`; // Expand
+  }, 0);
 }
 
-// Toggle student list for a sub-event
+// Toggle student list for a sub-event with sliding animation
 function toggleSubEvent(typeIndex, eventIndex) {
   const event = events[typeIndex].events[eventIndex];
-  const subEventItems = document.querySelectorAll(".sub-event-item");
-
   const existingStudentList = document.querySelector(".student-list");
-  if (existingStudentList) existingStudentList.remove();
+
+  if (existingStudentList) {
+    existingStudentList.style.height = "0px"; // Collapse animation
+    setTimeout(() => existingStudentList.remove(), 300); // Remove after animation
+  }
 
   if (openSubEvent === `${typeIndex}-${eventIndex}`) {
     openSubEvent = null;
@@ -222,8 +232,16 @@ function toggleSubEvent(typeIndex, eventIndex) {
     });
   }
 
+  const subEventItems = document.querySelectorAll(".sub-event-item");
   subEventItems[eventIndex].after(studentList);
+
+  // Add sliding animation
+  studentList.style.height = "0px"; // Start collapsed
+  setTimeout(() => {
+    studentList.style.height = `${studentList.scrollHeight}px`; // Expand
+  }, 0);
 }
+
 
 // Initialize the event display
 window.onload = displayEvents;
