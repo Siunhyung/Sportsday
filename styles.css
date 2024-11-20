@@ -7,6 +7,13 @@ body {
   color: #333;
 }
 
+/* Sliding Animations */
+.sub-event-list,
+.student-list {
+  overflow: hidden; /* Ensures smooth transitions */
+  transition: height 0.3s ease-out;
+}
+
 /* Header Section */
 header {
   background-color: #35387d; /* Blue background color */
@@ -30,7 +37,7 @@ header .logo {
   list-style: none;
 }
 
-/* Event Headers (e.g., Shot Putt, Long Jump) */
+/* Event Headers */
 .event-header {
   font-size: 20px;
   font-weight: bold;
@@ -44,13 +51,7 @@ header .logo {
   color: #007bff;
 }
 
-/* Sub-Event List (e.g., U7 Girls, U7 Boys) */
-.sub-event-list {
-  margin-left: 20px;
-  padding-left: 20px;
-  border-left: 2px solid #ddd;
-}
-
+/* Sub-Event Items */
 .sub-event-item {
   font-size: 18px;
   margin: 10px 0;
@@ -62,18 +63,15 @@ header .logo {
   color: #007bff;
 }
 
-/* Crossed-Out Events (if the time has passed) */
+/* Crossed-Out Events */
 .crossed-out {
   text-decoration: line-through;
   color: gray;
 }
 
 /* Student List */
-.student-list {
-  margin-left: 40px;
-  padding-left: 20px;
-  border-left: 2px dashed #ddd;
-  list-style-type: disc;
+.student-list li {
+  margin: 5px 0;
   font-size: 16px;
   color: #555;
 }
