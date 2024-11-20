@@ -1,40 +1,32 @@
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f4f4f4;
+// List of events and their times
+const events = [
+  { name: "100m Dash", time: "2024-11-20T09:00:00" },
+  { name: "200m Relay", time: "2024-11-20T10:00:00" },
+  { name: "High Jump", time: "2024-11-20T11:30:00" },
+  { name: "Lunch Break", time: "2024-11-20T12:30:00" },
+  { name: "Long Jump", time: "2024-11-20T14:00:00" },
+  { name: "400m Relay", time: "2024-11-20T15:30:00" },
+];
+
+// Function to display events
+function displayEvents() {
+  const eventsList = document.getElementById("eventsList");
+  const now = new Date();
+
+  events.forEach((event) => {
+    const eventTime = new Date(event.time);
+    const listItem = document.createElement("li");
+
+    listItem.textContent = `${event.name} - ${eventTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+    
+    // Add a crossed-out class if the event time has passed
+    if (now > eventTime) {
+      listItem.classList.add("crossed-out");
+    }
+
+    eventsList.appendChild(listItem);
+  });
 }
 
-.container {
-  max-width: 600px;
-  margin: 50px auto;
-  padding: 20px;
-  background: white;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-}
-
-h1 {
-  text-align: center;
-  color: #333;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  font-size: 18px;
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
-}
-
-li:last-child {
-  border-bottom: none;
-}
-
-.crossed-out {
-  text-decoration: line-through;
-  color: gray;
-}
+// Call the function when the page loads
+window.onload = displayEvents;
