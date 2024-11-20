@@ -1,4 +1,58 @@
 // Comprehensive list of events, times, and placeholders for student data
+const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ3fjlsr4BAzZ-ScMJGiPuD9iAHll0SKQXoD_tPy4Ni5RFKxh4I0arzZ4xGN014gQ/pub?gid=2141987583&single=true&output=csv";
+
+// Fetch data from Google Sheets and convert it to a structured format
+async function fetchStudentData() {
+  const response = await fetch(sheetUrl);
+  const csvData = await response.text();
+  return parseCSV(csvData);
+}
+
+// Parse the CSV data into a structured format
+function parseCSV(data) {
+  const rows = data.split("\n");
+  const headers = rows[0].split(",");
+
+  const parsedData = rows.slice(1).map((row) => {
+    const values = row.split(",");
+    const entry = {};
+    headers.forEach((header, index) => {
+      entry[header.trim()] = values[index]?.trim() || ""; // Handle missing values
+    });
+
+    // Return the entry only if it has all required fields
+    if (Object.values(entry).every((value) => value !== "")) {
+      return entry;
+    }
+    return null; // Mark invalid rows as null
+  });
+
+  // Filter out null entries (empty rows)
+  return parsedData.filter((entry) => entry !== null);
+}
+
+// Update events with student data from Google Sheets
+async function updateEventsWithData() {
+  const studentData = await fetchStudentData();
+
+  studentData.forEach((entry) => {
+    const { "Event Type": eventType, Category, "Student Name": studentName, Performance } = entry;
+
+    // Ensure all required fields are present before processing
+    if (eventType && Category && studentName && Performance) {
+      const eventTypeObj = events.find((event) => event.type === eventType);
+      if (eventTypeObj) {
+        const categoryObj = eventTypeObj.events.find((event) => event.category === Category);
+        if (categoryObj) {
+          categoryObj.students.push({ name: studentName, performance: Performance });
+        }
+      }
+    }
+  });
+
+  displayEvents(); // Re-render the updated events
+}
+
 const events = [
   {
     type: "Shot Putt",
@@ -242,59 +296,6 @@ function toggleSubEvent(typeIndex, eventIndex) {
   }, 0);
 }
 
-const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ3fjlsr4BAzZ-ScMJGiPuD9iAHll0SKQXoD_tPy4Ni5RFKxh4I0arzZ4xGN014gQ/pub?gid=2141987583&single=true&output=csv";
-
-// Fetch data from Google Sheets and convert it to a structured format
-async function fetchStudentData() {
-  const response = await fetch(sheetUrl);
-  const csvData = await response.text();
-  return parseCSV(csvData);
-}
-
-// Parse the CSV data into a structured format
-function parseCSV(data) {
-  const rows = data.split("\n");
-  const headers = rows[0].split(",");
-
-  const parsedData = rows.slice(1).map((row) => {
-    const values = row.split(",");
-    const entry = {};
-    headers.forEach((header, index) => {
-      entry[header.trim()] = values[index]?.trim() || ""; // Handle missing values
-    });
-
-    // Return the entry only if it has all required fields
-    if (Object.values(entry).every((value) => value !== "")) {
-      return entry;
-    }
-    return null; // Mark invalid rows as null
-  });
-
-  // Filter out null entries (empty rows)
-  return parsedData.filter((entry) => entry !== null);
-}
-
-// Update events with student data from Google Sheets
-async function updateEventsWithData() {
-  const studentData = await fetchStudentData();
-
-  studentData.forEach((entry) => {
-    const { "Event Type": eventType, Category, "Student Name": studentName, Performance } = entry;
-
-    // Ensure all required fields are present before processing
-    if (eventType && Category && studentName && Performance) {
-      const eventTypeObj = events.find((event) => event.type === eventType);
-      if (eventTypeObj) {
-        const categoryObj = eventTypeObj.events.find((event) => event.category === Category);
-        if (categoryObj) {
-          categoryObj.students.push({ name: studentName, performance: Performance });
-        }
-      }
-    }
-  });
-
-  displayEvents(); // Re-render the updated events
-}
 
 
 // Call this function on page load
