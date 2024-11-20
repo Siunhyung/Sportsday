@@ -165,7 +165,7 @@ function parseCSV(data) {
 
 // Update events with student data from Google Sheets
 async function updateEventsWithData() {
-  const studentData = await fetchAndCollateData();
+  const studentData = await fetchStudentData();
 
   studentData.forEach((entry) => {
     const { "Event Type": eventType, Category, "Student Name": studentName, Performance } = entry;
@@ -175,13 +175,18 @@ async function updateEventsWithData() {
       if (eventTypeObj) {
         const categoryObj = eventTypeObj.events.find((event) => event.category === Category);
         if (categoryObj) {
-          const performanceWithUnit = `${Performance} ${eventTypeObj.unit}`;
+          // Add unit if it exists
+          const performanceWithUnit = eventTypeObj.unit
+            ? `${Performance} ${eventTypeObj.unit}`
+            : Performance;
+
           categoryObj.students.push({ name: studentName, performance: performanceWithUnit });
         }
       }
     }
   });
 }
+
 
 
 
@@ -232,12 +237,12 @@ function toggleEventType(typeIndex) {
     // Add cross-out logic for past events
     const now = new Date();
     const [eventHour, eventMinute] = event.time.split(":").map(Number);
-    const eventTime = new Date();
-    eventTime.setHours(eventHour, eventMinute, 0, 0);
+    const eventTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), eventHour, eventMinute, 0, 0);
 
     if (now > eventTime) {
       subEventItem.classList.add("crossed-out");
     }
+
 
     subEventItem.addEventListener("click", (e) => {
       e.stopPropagation();
@@ -297,6 +302,8 @@ function toggleSubEvent(typeIndex, eventIndex) {
     studentList.style.height = `${studentList.scrollHeight}px`;
   }, 0);
 }
+
+
 
 
 
