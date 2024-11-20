@@ -7,7 +7,19 @@ body {
   color: #333;
 }
 
-/* Container for the Main Content */
+/* Header Section */
+header {
+  background-color: #35387d; /* Blue background color */
+  padding: 10px 0;
+  text-align: center;
+}
+
+header .logo {
+  max-width: 200px;
+  height: auto;
+}
+
+/* Main Content */
 #eventsList {
   max-width: 800px;
   margin: 20px auto;
@@ -68,6 +80,16 @@ body {
 
 .student-list li {
   margin: 5px 0;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 10px 0;
+  font-size: 14px;
+  color: #777;
+  background-color: #35387d;
+  color: white;
 }
 
 /* Responsive Design */
