@@ -207,7 +207,16 @@ function displayEvents() {
     eventsList.appendChild(header);
   });
 }
+  const isVisible = detailsElement.style.maxHeight;
+  detailsElement.style.maxHeight = isVisible ? null : `${detailsElement.scrollHeight}px`;
+}
 
+document.querySelectorAll('.event-header').forEach(header => {
+  const details = header.nextElementSibling;
+  header.addEventListener('click', () => {
+    toggleDetails(details);
+  });
+});
 // Toggle sub-events for a specific event type with sliding animation
 function toggleEventType(typeIndex) {
   const eventType = events[typeIndex];
