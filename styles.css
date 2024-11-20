@@ -49,6 +49,11 @@ body {
     box-shadow: 0px 0px 5px #90caf9;
   }
 }
+.event-details {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+}
 
 header .logo {
   max-width: 200px;
@@ -85,10 +90,11 @@ header .logo {
 }
 
 .event-header:hover {
-  color: #007bff;
-  background-color: #35387d; /* Darker background on hover */
-  color: white; /* Invert text color */
+  background: #90caf9;
+  color: #ffffff;
+  cursor: pointer;
 }
+
 
 /* Sub-Event Items */
 .sub-event-item {
