@@ -15,7 +15,8 @@ const events = [
       { category: "U15 Boys", time: "10:15", students: [] },
     ],
   },
-  type: "Long Jump",
+  {
+    type: "Long Jump",
     events: [
       { category: "U7 Girls", time: "08:30", students: [] },
       { category: "U7 Boys", time: "08:30", students: [] },
@@ -29,7 +30,8 @@ const events = [
       { category: "U15 Boys", time: "10:15", students: [] },
     ],
   },
-  type: "Javelin",
+  {
+    type: "Javelin",
     events: [
       { category: "U7 Girls", time: "10:30", students: [] },
       { category: "U7 Boys", time: "10:30", students: [] },
@@ -43,7 +45,8 @@ const events = [
       { category: "U15 Boys", time: "12:15", students: [] },
     ],
   },
-  type: "Triple Jump",
+  {
+    type: "Triple Jump",
     events: [
       { category: "U7 Girls", time: "10:30", students: [] },
       { category: "U7 Boys", time: "10:30", students: [] },
@@ -57,7 +60,8 @@ const events = [
       { category: "U15 Boys", time: "12:15", students: [] },
     ],
   },
-  type: "800m",
+  {
+    type: "800m",
     events: [
       { category: "U13 Girls", time: "09:00", students: [] },
       { category: "U13 Boys", time: "09:10", students: [] },
@@ -65,7 +69,8 @@ const events = [
       { category: "U15 Boys", time: "09:30", students: [] },
     ],
   },
-  type: "600m",
+  {
+    type: "600m",
     events: [
       { category: "U9 Girls", time: "09:37", students: [] },
       { category: "U9 Boys", time: "09:44", students: [] },
@@ -73,7 +78,8 @@ const events = [
       { category: "U11 Boys", time: "09:58", students: [] },
     ],
   },
-  type: "400m",
+  {
+    type: "400m",
     events: [
       { category: "U9 Girls", time: "10:05", students: [] },
       { category: "U9 Boys", time: "10:12", students: [] },
@@ -85,7 +91,8 @@ const events = [
       { category: "U15 Boys", time: "10:51", students: [] },
     ],
   },
-  type: "200m",
+  {
+    type: "200m",
     events: [
       { category: "U7 Girls", time: "10:56", students: [] },
       { category: "U7 Boys", time: "11:01", students: [] },
@@ -99,7 +106,8 @@ const events = [
       { category: "U15 Boys", time: "10:41", students: [] },
     ],
   },
-  type: "100m",
+  {
+    type: "100m",
     events: [
       { category: "U9 Girls", time: "11:51", students: [] },
       { category: "U9 Boys", time: "11:54", students: [] },
@@ -111,7 +119,8 @@ const events = [
       { category: "U15 Boys", time: "12:15", students: [] },
     ],
   },
-  type: "60m",
+  {
+    type: "60m",
     events: [
       { category: "U7 Girls", time: "11:45", students: [] },
       { category: "U7 Boys", time: "11:48", students: [] },
