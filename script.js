@@ -298,7 +298,7 @@ function toggleSubEvent(typeIndex, eventIndex) {
 
 
 
-// Call this function on page load
-window.onload = updateEventsWithData;
-// Initialize the event display
-window.onload = displayEvents;
+window.onload = async function () {
+  await updateEventsWithData(); // Fetch and update events with student data
+  displayEvents(); // Render the events with updated data
+};
