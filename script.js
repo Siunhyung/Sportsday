@@ -138,6 +138,7 @@ const studentSearchInput = document.getElementById("studentSearch");
 const searchResultsContainer = document.getElementById("searchResults");
 
 
+
 // Fetch data from Google Sheets and convert it to a structured format
 async function fetchStudentData() {
   const response = await fetch(sheetUrl);
@@ -358,16 +359,13 @@ function renderSearchResults(results) {
 }
 
 studentSearchInput.addEventListener("input", (e) => {
-  const studentName = e.target.value;
+  const studentName = e.target.value.trim(); // Remove leading/trailing spaces
   if (studentName.length > 0) {
     const results = searchStudentEvents(studentName);
     renderSearchResults(results);
   } else {
-    searchResultsContainer.innerHTML = ""; // Clear results if search input is empty
+    searchResultsContainer.innerHTML = ""; // Clear results if input is empty
   }
-});
-document.addEventListener("DOMContentLoaded", () => {
-  renderEvents(); // Initial rendering of events
 });
 
 
@@ -376,6 +374,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 window.onload = async function () {
-  await updateEventsWithData(); // Fetch and update events with student data
-  displayEvents(); // Render the events with updated data
+  await updateEventsWithData(); // Ensure events are updated
+  displayEvents(); // Render events after data is loaded
 };
+
