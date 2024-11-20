@@ -133,6 +133,11 @@ const events = [
   },
   // Add more event types (Long Jump, Javelin, etc.) similarly
 ];
+
+const studentSearchInput = document.getElementById("studentSearch");
+const searchResultsContainer = document.getElementById("searchResults");
+
+
 // Fetch data from Google Sheets and convert it to a structured format
 async function fetchStudentData() {
   const response = await fetch(sheetUrl);
@@ -316,6 +321,54 @@ function toggleSubEvent(typeIndex, eventIndex) {
   }, 0);
 }
 
+function searchStudentEvents(studentName) {
+  const results = [];
+  events.forEach((eventType) => {
+    eventType.events.forEach((event) => {
+      event.students.forEach((student) => {
+        if (student.name.toLowerCase().includes(studentName.toLowerCase())) {
+          results.push({
+            eventType: eventType.type,
+            category: event.category,
+            time: event.time,
+            performance: student.performance || "N/A",
+          });
+        }
+      });
+    });
+  });
+  return results;
+}
+
+function renderSearchResults(results) {
+  searchResultsContainer.innerHTML = "";
+  if (results.length === 0) {
+    searchResultsContainer.innerHTML = `<li class="no-results">No results found</li>`;
+    return;
+  }
+  results.forEach((result) => {
+    const resultItem = document.createElement("li");
+    resultItem.innerHTML = `
+      <strong>${result.eventType}</strong> - ${result.category} <br>
+      <span>Time: ${result.time}</span> <br>
+      <span>Performance: ${result.performance}</span>
+    `;
+    searchResultsContainer.appendChild(resultItem);
+  });
+}
+
+studentSearchInput.addEventListener("input", (e) => {
+  const studentName = e.target.value;
+  if (studentName.length > 0) {
+    const results = searchStudentEvents(studentName);
+    renderSearchResults(results);
+  } else {
+    searchResultsContainer.innerHTML = ""; // Clear results if search input is empty
+  }
+});
+document.addEventListener("DOMContentLoaded", () => {
+  renderEvents(); // Initial rendering of events
+});
 
 
 
