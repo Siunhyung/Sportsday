@@ -1,31 +1,77 @@
-// List of events with types, categories, times, and student data
+// Comprehensive list of all events, times, and placeholders for student data
 const events = [
   {
     type: "Shot Putt",
     events: [
-      { category: "U7 Girls", time: "2024-11-20T08:30:00", students: [{ name: "Alice", performance: "3.2m" }, { name: "Bob", performance: "3.1m" }] },
-      { category: "U7 Boys", time: "2024-11-20T08:30:00", students: [{ name: "Charlie", performance: "3.5m" }, { name: "David", performance: "3.4m" }] },
+      { category: "U7 Girls", time: "2024-11-20T08:30:00", students: [] },
+      { category: "U7 Boys", time: "2024-11-20T08:30:00", students: [] },
+      { category: "U9 Girls", time: "2024-11-20T09:00:00", students: [] },
+      { category: "U9 Boys", time: "2024-11-20T09:00:00", students: [] },
+      { category: "U11 Girls", time: "2024-11-20T09:30:00", students: [] },
+      { category: "U11 Boys", time: "2024-11-20T09:30:00", students: [] },
+      { category: "U13 Girls", time: "2024-11-20T10:00:00", students: [] },
+      { category: "U13 Boys", time: "2024-11-20T10:00:00", students: [] },
+      { category: "U15 Girls", time: "2024-11-20T10:15:00", students: [] },
+      { category: "U15 Boys", time: "2024-11-20T10:15:00", students: [] },
+    ],
+  },
+  {
+    type: "Long Jump",
+    events: [
+      { category: "U7 Girls", time: "2024-11-20T08:30:00", students: [] },
+      { category: "U7 Boys", time: "2024-11-20T08:30:00", students: [] },
+      { category: "U9 Girls", time: "2024-11-20T09:00:00", students: [] },
+      { category: "U9 Boys", time: "2024-11-20T09:00:00", students: [] },
+      { category: "U11 Girls", time: "2024-11-20T09:30:00", students: [] },
+      { category: "U11 Boys", time: "2024-11-20T09:30:00", students: [] },
+      { category: "U13 Girls", time: "2024-11-20T10:00:00", students: [] },
+      { category: "U13 Boys", time: "2024-11-20T10:00:00", students: [] },
+      { category: "U15 Girls", time: "2024-11-20T10:15:00", students: [] },
+      { category: "U15 Boys", time: "2024-11-20T10:15:00", students: [] },
     ],
   },
   {
     type: "Javelin",
     events: [
-      { category: "U7 Girls", time: "2024-11-20T08:30:00", students: [{ name: "Eve", performance: "18m" }, { name: "Frank", performance: "17.5m" }] },
-      { category: "U7 Boys", time: "2024-11-20T08:30:00", students: [{ name: "Grace", performance: "19m" }, { name: "Henry", performance: "18.8m" }] },
+      { category: "U7 Girls", time: "2024-11-20T10:30:00", students: [] },
+      { category: "U7 Boys", time: "2024-11-20T10:30:00", students: [] },
+      { category: "U9 Girls", time: "2024-11-20T11:00:00", students: [] },
+      { category: "U9 Boys", time: "2024-11-20T11:00:00", students: [] },
+      { category: "U11 Girls", time: "2024-11-20T11:30:00", students: [] },
+      { category: "U11 Boys", time: "2024-11-20T11:30:00", students: [] },
+      { category: "U13 Girls", time: "2024-11-20T12:00:00", students: [] },
+      { category: "U13 Boys", time: "2024-11-20T12:00:00", students: [] },
+      { category: "U15 Girls", time: "2024-11-20T12:15:00", students: [] },
+      { category: "U15 Boys", time: "2024-11-20T12:15:00", students: [] },
     ],
   },
+  {
+    type: "Triple Jump",
+    events: [
+      { category: "U7 Girls", time: "2024-11-20T10:30:00", students: [] },
+      { category: "U7 Boys", time: "2024-11-20T10:30:00", students: [] },
+      { category: "U9 Girls", time: "2024-11-20T11:00:00", students: [] },
+      { category: "U9 Boys", time: "2024-11-20T11:00:00", students: [] },
+      { category: "U11 Girls", time: "2024-11-20T11:30:00", students: [] },
+      { category: "U11 Boys", time: "2024-11-20T11:30:00", students: [] },
+      { category: "U13 Girls", time: "2024-11-20T12:00:00", students: [] },
+      { category: "U13 Boys", time: "2024-11-20T12:00:00", students: [] },
+      { category: "U15 Girls", time: "2024-11-20T12:15:00", students: [] },
+      { category: "U15 Boys", time: "2024-11-20T12:15:00", students: [] },
+    ],
+  },
+  // Add track events (800m, 600m, etc.) in similar structure
 ];
 
-let openEventType = null; // Keeps track of the open event type
-let openSubEvent = null; // Keeps track of the open sub-event
+// JavaScript logic for handling interactivity
+let openEventType = null;
+let openSubEvent = null;
 
-// Function to display event types
 function displayEvents() {
   const eventsList = document.getElementById("eventsList");
-  eventsList.innerHTML = ""; // Clear existing content
+  eventsList.innerHTML = ""; // Clear previous content
 
   events.forEach((eventType, typeIndex) => {
-    // Add event type as a clickable header
     const header = document.createElement("h2");
     header.textContent = eventType.type;
     header.classList.add("event-header");
@@ -34,69 +80,56 @@ function displayEvents() {
   });
 }
 
-// Toggle sub-events for an event type (e.g., "Shot Putt")
 function toggleEventType(typeIndex) {
   const eventType = events[typeIndex];
   const eventsList = document.getElementById("eventsList");
 
-  // Remove any existing sub-event lists
   const existingSubEventList = document.querySelector(".sub-event-list");
   if (existingSubEventList) existingSubEventList.remove();
 
-  // If the same event type is clicked again, close the list
   if (openEventType === typeIndex) {
     openEventType = null;
     return;
   }
 
-  // Set the current event type as open
   openEventType = typeIndex;
 
-  // Create a sub-event list for the selected event type
   const subEventList = document.createElement("ul");
   subEventList.classList.add("sub-event-list");
 
   eventType.events.forEach((event, eventIndex) => {
     const subEventItem = document.createElement("li");
-    const eventTime = new Date(event.time).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-    subEventItem.textContent = `${event.category} - ${eventTime}`;
+    subEventItem.textContent = `${event.category} - ${new Date(event.time).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
     subEventItem.classList.add("sub-event-item");
     subEventItem.addEventListener("click", (e) => {
-      e.stopPropagation(); // Prevent triggering the parent event type click
+      e.stopPropagation();
       toggleSubEvent(typeIndex, eventIndex);
     });
     subEventList.appendChild(subEventItem);
   });
 
-  // Insert the sub-event list after the clicked event type header
   const headers = document.querySelectorAll(".event-header");
   headers[typeIndex].after(subEventList);
 }
 
-// Toggle student list for a sub-event (e.g., "U7 Girls")
 function toggleSubEvent(typeIndex, eventIndex) {
-  const eventType = events[typeIndex];
-  const event = eventType.events[eventIndex];
-  const eventsList = document.getElementById("eventsList");
+  const event = events[typeIndex].events[eventIndex];
+  const subEventItems = document.querySelectorAll(".sub-event-item");
 
-  // Remove any existing student lists
   const existingStudentList = document.querySelector(".student-list");
   if (existingStudentList) existingStudentList.remove();
 
-  // If the same sub-event is clicked again, close the list
   if (openSubEvent === `${typeIndex}-${eventIndex}`) {
     openSubEvent = null;
     return;
   }
 
-  // Set the current sub-event as open
   openSubEvent = `${typeIndex}-${eventIndex}`;
 
-  // Create a student list for the selected sub-event
   const studentList = document.createElement("ul");
   studentList.classList.add("student-list");
 
-  if (!event.students || event.students.length === 0) {
+  if (!event.students.length) {
     const noStudents = document.createElement("li");
     noStudents.textContent = "No students participated.";
     studentList.appendChild(noStudents);
@@ -108,10 +141,7 @@ function toggleSubEvent(typeIndex, eventIndex) {
     });
   }
 
-  // Insert the student list after the clicked sub-event
-  const subEventItems = document.querySelectorAll(".sub-event-item");
   subEventItems[eventIndex].after(studentList);
 }
 
-// Call the function when the page loads
 window.onload = displayEvents;
