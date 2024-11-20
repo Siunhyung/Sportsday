@@ -5,6 +5,23 @@ body {
   background-color: #f4f4f4;
 }
 
+header {
+  width: 100%;
+  background-color: #35387d; /* Banner background color */
+}
+
+.banner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.logo {
+  max-width: 200px;
+  height: auto;
+}
+
 .container {
   max-width: 600px;
   margin: 50px auto;
