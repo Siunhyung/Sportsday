@@ -1,25 +1,42 @@
-/* General Styles */
+/* General Reset */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
   background-color: #f4f4f4;
+  color: #333;
 }
 
-/* Header for Event Types */
+/* Container for the Main Content */
+#eventsList {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  list-style: none;
+}
+
+/* Event Headers (e.g., Shot Putt, Long Jump) */
 .event-header {
   font-size: 20px;
   font-weight: bold;
   margin-top: 20px;
-  color: #35387d; /* Matches banner color */
+  color: #35387d;
   cursor: pointer;
+  transition: color 0.2s ease-in-out;
 }
 
-/* Sub-Event List */
+.event-header:hover {
+  color: #007bff;
+}
+
+/* Sub-Event List (e.g., U7 Girls, U7 Boys) */
 .sub-event-list {
   margin-left: 20px;
-  list-style-type: none;
-  padding: 0;
+  padding-left: 20px;
+  border-left: 2px solid #ddd;
 }
 
 .sub-event-item {
@@ -33,11 +50,41 @@ body {
   color: #007bff;
 }
 
+/* Crossed-Out Events (if the time has passed) */
+.crossed-out {
+  text-decoration: line-through;
+  color: gray;
+}
+
 /* Student List */
 .student-list {
   margin-left: 40px;
-  list-style-type: none;
-  padding: 0;
+  padding-left: 20px;
+  border-left: 2px dashed #ddd;
+  list-style-type: disc;
   font-size: 16px;
   color: #555;
+}
+
+.student-list li {
+  margin: 5px 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  #eventsList {
+    padding: 15px;
+  }
+
+  .event-header {
+    font-size: 18px;
+  }
+
+  .sub-event-item {
+    font-size: 16px;
+  }
+
+  .student-list {
+    font-size: 14px;
+  }
 }
