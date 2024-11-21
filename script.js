@@ -283,18 +283,6 @@ function toggleEventType(typeIndex) {
     subEventList.style.height = `${subEventList.scrollHeight}px`; // Expand
   }, 0);
 }
-
-// Toggle student list for a sub-event with sliding animation
-function toggleSubEvent(typeIndex, eventIndex) {
-  openStudentPanel(typeIndex, eventIndex);
-}
-
-  // Prevent default scrolling or page jumping behavior
-  currentSubEventItem.addEventListener("click", (e) => {
-    e.preventDefault();
-  });
-}
-
 function openStudentPanel(typeIndex, eventIndex) {
   const event = events[typeIndex].events[eventIndex];
 
@@ -335,6 +323,18 @@ function openStudentPanel(typeIndex, eventIndex) {
 function closeStudentPanel() {
   studentPanel.style.bottom = "-100%"; // Slide the panel out of view
 }
+// Toggle student list for a sub-event with sliding animation
+function toggleSubEvent(typeIndex, eventIndex) {
+  openStudentPanel(typeIndex, eventIndex);
+}
+
+  // Prevent default scrolling or page jumping behavior
+  currentSubEventItem.addEventListener("click", (e) => {
+    e.preventDefault();
+  });
+}
+
+
 
 // Attach event listener to the close button
 closePanelButton.addEventListener("click", closeStudentPanel);
