@@ -170,16 +170,17 @@ header .logo {
 /* Sliding Panel */
 .student-panel {
   position: fixed;
-  bottom: -100%; /* Initially hidden below the screen */
+  bottom: -100%;
   left: 0;
   width: 100%;
-  height: 50%; /* Adjust height based on preference */
+  height: 50%; /* Adjust based on desired height */
   background-color: #fff;
   box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
-  transition: bottom 0.3s ease; /* Smooth sliding effect */
+  transition: bottom 0.3s ease;
   z-index: 1000;
-  overflow-y: auto; /* Allow scrolling if the content overflows */
+  overflow-y: auto;
 }
+
 
 /* Panel Header */
 .student-panel-header {
