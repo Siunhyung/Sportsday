@@ -336,17 +336,18 @@ function toggleSubEvent(typeIndex, eventIndex) {
     currentSubEventItem.after(studentList);
   }
 
-  // Apply sliding animation
-  studentList.style.height = "0px";
+  // Apply dynamic height for expansion
+  studentList.style.height = "0px"; // Start collapsed
   setTimeout(() => {
-    studentList.style.height = `${studentList.scrollHeight}px`;
-    studentList.style.maxHeight = "300px"; // Limit max height for scrolling
-    studentList.style.overflowY = "auto"; // Add scrollbar if needed
+    studentList.style.height = `${studentList.scrollHeight}px`; // Expand dynamically based on content
   }, 0);
 
-  // Scroll to the expanded student list
-  studentList.scrollIntoView({ behavior: "smooth", block: "start" });
+  // Prevent default scrolling or page jumping behavior
+  currentSubEventItem.addEventListener("click", (e) => {
+    e.preventDefault();
+  });
 }
+
 
 
 function searchStudentEvents(studentName) {
