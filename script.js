@@ -325,7 +325,7 @@ function closeStudentPanel() {
   currentSubEventItem.addEventListener("click", (e) => {
     e.preventDefault();
   });
-}
+
 
 
 
