@@ -1,4 +1,8 @@
 // Comprehensive list of events, times, and placeholders for student data
+const studentPanel = document.getElementById("studentPanel");
+const studentPanelTitle = document.getElementById("studentPanelTitle");
+const studentPanelList = document.getElementById("studentPanelList");
+const closePanelButton = document.getElementById("closePanel");
 const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ3fjlsr4BAzZ-ScMJGiPuD9iAHll0SKQXoD_tPy4Ni5RFKxh4I0arzZ4xGN014gQ/pub?gid=2141987583&single=true&output=csv";
 const events = [
   {
@@ -282,31 +286,27 @@ function toggleEventType(typeIndex) {
 
 // Toggle student list for a sub-event with sliding animation
 function toggleSubEvent(typeIndex, eventIndex) {
+  openStudentPanel(typeIndex, eventIndex);
+}
+
+  // Prevent default scrolling or page jumping behavior
+  currentSubEventItem.addEventListener("click", (e) => {
+    e.preventDefault();
+  });
+}
+
+function openStudentPanel(typeIndex, eventIndex) {
   const event = events[typeIndex].events[eventIndex];
-  const existingStudentList = document.querySelector(".student-list");
 
-  // Remove the current student list if it exists
-  if (existingStudentList) {
-    existingStudentList.style.height = "0px";
-    setTimeout(() => existingStudentList.remove(), 300);
-  }
+  // Update the panel title
+  studentPanelTitle.textContent = `Students for ${event.category}`;
 
-  // If the clicked sub-event is already open, close it
-  if (openSubEvent === `${typeIndex}-${eventIndex}`) {
-    openSubEvent = null;
-    return;
-  }
-
-  openSubEvent = `${typeIndex}-${eventIndex}`;
-
-  // Create and populate the student list
-  const studentList = document.createElement("ul");
-  studentList.classList.add("student-list");
-
+  // Populate the student list
+  studentPanelList.innerHTML = ""; // Clear existing content
   if (!event.students.length) {
     const noStudents = document.createElement("li");
     noStudents.textContent = "No students participated.";
-    studentList.appendChild(noStudents);
+    studentPanelList.appendChild(noStudents);
   } else {
     event.students.forEach((student) => {
       const studentItem = document.createElement("li");
@@ -320,35 +320,24 @@ function toggleSubEvent(typeIndex, eventIndex) {
       studentPerformance.textContent = student.performance || "Upcoming";
       studentPerformance.classList.add("student-performance");
 
-      // Append elements to the list item
+      // Append name and performance to the list item
       studentItem.appendChild(studentName);
       studentItem.appendChild(studentPerformance);
 
-      studentList.appendChild(studentItem);
+      studentPanelList.appendChild(studentItem);
     });
   }
 
-  // Add the student list after the selected sub-event
-  const subEventItems = document.querySelectorAll(".sub-event-item");
-  const currentSubEventItem = subEventItems[eventIndex];
-
-  if (currentSubEventItem) {
-    currentSubEventItem.after(studentList);
-  }
-
-  // Apply dynamic height for expansion
-  studentList.style.height = "0px"; // Start collapsed
-  setTimeout(() => {
-    studentList.style.height = `${studentList.scrollHeight}px`; // Expand dynamically based on content
-  }, 0);
-
-  // Prevent default scrolling or page jumping behavior
-  currentSubEventItem.addEventListener("click", (e) => {
-    e.preventDefault();
-  });
+  // Slide the panel into view
+  studentPanel.style.bottom = "0";
 }
 
+function closeStudentPanel() {
+  studentPanel.style.bottom = "-100%"; // Slide the panel out of view
+}
 
+// Attach event listener to the close button
+closePanelButton.addEventListener("click", closeStudentPanel);
 
 function searchStudentEvents(studentName) {
   const results = [];
