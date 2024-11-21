@@ -285,11 +285,13 @@ function toggleSubEvent(typeIndex, eventIndex) {
   const event = events[typeIndex].events[eventIndex];
   const existingStudentList = document.querySelector(".student-list");
 
+  // Remove existing student list if present
   if (existingStudentList) {
     existingStudentList.style.height = "0px";
     setTimeout(() => existingStudentList.remove(), 300);
   }
 
+  // If the clicked sub-event is already open, close it
   if (openSubEvent === `${typeIndex}-${eventIndex}`) {
     openSubEvent = null;
     return;
@@ -297,6 +299,7 @@ function toggleSubEvent(typeIndex, eventIndex) {
 
   openSubEvent = `${typeIndex}-${eventIndex}`;
 
+  // Create and populate the student list
   const studentList = document.createElement("ul");
   studentList.classList.add("student-list");
 
@@ -308,16 +311,16 @@ function toggleSubEvent(typeIndex, eventIndex) {
     event.students.forEach((student) => {
       const studentItem = document.createElement("li");
 
-      // Create a container for name and performance
+      // Create elements for student name and performance
       const studentName = document.createElement("span");
       studentName.textContent = student.name;
       studentName.classList.add("student-name");
 
       const studentPerformance = document.createElement("span");
-      studentPerformance.textContent = student.performance;
+      studentPerformance.textContent = student.performance || "Upcoming";
       studentPerformance.classList.add("student-performance");
 
-      // Append name and performance into the student item
+      // Append elements to the list item
       studentItem.appendChild(studentName);
       studentItem.appendChild(studentPerformance);
 
@@ -325,9 +328,15 @@ function toggleSubEvent(typeIndex, eventIndex) {
     });
   }
 
+  // Correctly target the sub-event to append the student list
   const subEventItems = document.querySelectorAll(".sub-event-item");
-  subEventItems[eventIndex].after(studentList);
+  const currentSubEventItem = subEventItems[eventIndex];
 
+  if (currentSubEventItem) {
+    currentSubEventItem.after(studentList);
+  }
+
+  // Apply sliding animation
   studentList.style.height = "0px";
   setTimeout(() => {
     studentList.style.height = `${studentList.scrollHeight}px`;
