@@ -292,7 +292,10 @@ function openStudentPanel(typeIndex, eventIndex) {
   const event = events[typeIndex].events[eventIndex];
   studentPanelTitle.textContent = `Students for ${event.category}`;
 
+  // Clear the panel list
   studentPanelList.innerHTML = "";
+
+  // Populate the panel with students or a message if none exist
   if (!event.students.length) {
     const noStudents = document.createElement("li");
     noStudents.textContent = "No students participated.";
@@ -309,22 +312,16 @@ function openStudentPanel(typeIndex, eventIndex) {
       studentPanelList.appendChild(studentItem);
     });
   }
-  studentPanel.style.bottom = "0"; // Show the panel
+
+  // Slide the panel into view
+  studentPanel.style.bottom = "0";
 }
 
+// Close the student panel
 closePanelButton.addEventListener("click", () => {
-  studentPanel.style.bottom = "-100%"; // Hide the panel
+  studentPanel.style.bottom = "-100%";
 });
 
-function closeStudentPanel() {
-  studentPanel.style.bottom = "-100%"; // Slide the panel out of view
-}
-
-
-  // Prevent default scrolling or page jumping behavior
-  currentSubEventItem.addEventListener("click", (e) => {
-    e.preventDefault();
-  });
 
 
 
