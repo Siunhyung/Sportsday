@@ -283,14 +283,16 @@ function toggleEventType(typeIndex) {
     subEventList.style.height = `${subEventList.scrollHeight}px`; // Expand
   }, 0);
 }
+function toggleSubEvent(typeIndex, eventIndex) {
+  openStudentPanel(typeIndex, eventIndex);
+}
+
+// Prevent default scrolling or page jumping behavior in openStudentPanel:
 function openStudentPanel(typeIndex, eventIndex) {
   const event = events[typeIndex].events[eventIndex];
-
-  // Update the panel title
   studentPanelTitle.textContent = `Students for ${event.category}`;
 
-  // Populate the student list
-  studentPanelList.innerHTML = ""; // Clear existing content
+  studentPanelList.innerHTML = "";
   if (!event.students.length) {
     const noStudents = document.createElement("li");
     noStudents.textContent = "No students participated.";
@@ -298,35 +300,26 @@ function openStudentPanel(typeIndex, eventIndex) {
   } else {
     event.students.forEach((student) => {
       const studentItem = document.createElement("li");
-
-      // Create elements for student name and performance
       const studentName = document.createElement("span");
       studentName.textContent = student.name;
-      studentName.classList.add("student-name");
-
       const studentPerformance = document.createElement("span");
       studentPerformance.textContent = student.performance || "Upcoming";
-      studentPerformance.classList.add("student-performance");
-
-      // Append name and performance to the list item
       studentItem.appendChild(studentName);
       studentItem.appendChild(studentPerformance);
-
       studentPanelList.appendChild(studentItem);
     });
   }
-
-  // Slide the panel into view
-  studentPanel.style.bottom = "0";
+  studentPanel.style.bottom = "0"; // Show the panel
 }
+
+closePanelButton.addEventListener("click", () => {
+  studentPanel.style.bottom = "-100%"; // Hide the panel
+});
 
 function closeStudentPanel() {
   studentPanel.style.bottom = "-100%"; // Slide the panel out of view
 }
-// Toggle student list for a sub-event with sliding animation
-function toggleSubEvent(typeIndex, eventIndex) {
-  openStudentPanel(typeIndex, eventIndex);
-}
+
 
   // Prevent default scrolling or page jumping behavior
   currentSubEventItem.addEventListener("click", (e) => {
