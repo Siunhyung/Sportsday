@@ -285,7 +285,7 @@ function toggleSubEvent(typeIndex, eventIndex) {
   const event = events[typeIndex].events[eventIndex];
   const existingStudentList = document.querySelector(".student-list");
 
-  // Remove existing student list if present
+  // Remove the current student list if it exists
   if (existingStudentList) {
     existingStudentList.style.height = "0px";
     setTimeout(() => existingStudentList.remove(), 300);
@@ -328,7 +328,7 @@ function toggleSubEvent(typeIndex, eventIndex) {
     });
   }
 
-  // Correctly target the sub-event to append the student list
+  // Add the student list after the selected sub-event
   const subEventItems = document.querySelectorAll(".sub-event-item");
   const currentSubEventItem = subEventItems[eventIndex];
 
@@ -340,8 +340,14 @@ function toggleSubEvent(typeIndex, eventIndex) {
   studentList.style.height = "0px";
   setTimeout(() => {
     studentList.style.height = `${studentList.scrollHeight}px`;
+    studentList.style.maxHeight = "300px"; // Limit max height for scrolling
+    studentList.style.overflowY = "auto"; // Add scrollbar if needed
   }, 0);
+
+  // Scroll to the expanded student list
+  studentList.scrollIntoView({ behavior: "smooth", block: "start" });
 }
+
 
 function searchStudentEvents(studentName) {
   const results = [];
