@@ -1,6 +1,8 @@
 // Comprehensive list of events, times, and placeholders for student data
 
-const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ3fjlsr4BAzZ-ScMJGiPuD9iAHll0SKQXoD_tPy4Ni5RFKxh4I0arzZ4xGN014gQ/pub?gid=2141987583&single=true&output=csv";
+const sheetUrls = ["https://docs.google.com/spreadsheets/d/e/2PACX-1vQ3fjlsr4BAzZ-ScMJGiPuD9iAHll0SKQXoD_tPy4Ni5RFKxh4I0arzZ4xGN014gQ/pub?gid=2141987583&single=true&output=csv",
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vT894e2E034w4CRm9KmFhzwqABYfTf2oK3BYhC0K4-5u5J1DpLMI70lxNSwCnAqkw/pub?gid=1704478371&single=true&output=csv",
+  ];
 const events = [
   {
     type: "Shot Putt",
@@ -143,15 +145,20 @@ const studentPanelTitle = document.getElementById("studentPanelTitle");
 const studentPanelList = document.getElementById("studentPanelList");
 const closePanelButton = document.getElementById("closePanel");
 
-
-// Fetch data from Google Sheets and convert it to a structured format
-async function fetchStudentData() {
-  const response = await fetch(sheetUrl);
-  const csvData = await response.text();
-  return parseCSV(csvData);
+// Fetch data from a single Google Sheet URL
+async function fetchSheetData(url) {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`Failed to fetch: ${response.statusText}`);
+    const csvData = await response.text();
+    return parseCSV(csvData);
+  } catch (error) {
+    console.error(`Error fetching data from ${url}:`, error);
+    return []; // Return an empty array for failed fetches
+  }
 }
 
-// Parse the CSV data into a structured format
+// Parse CSV data into an array of objects
 function parseCSV(data) {
   const rows = data.split("\n");
   const headers = rows[0].split(",");
@@ -160,33 +167,41 @@ function parseCSV(data) {
     const values = row.split(",");
     const entry = {};
     headers.forEach((header, index) => {
-      entry[header.trim()] = values[index]?.trim() || ""; // Fill missing fields with an empty string
+      entry[header.trim()] = values[index]?.trim() || "";
     });
-    return entry; // Return entry even if some fields are empty
-  });
+    return entry;
+  }).filter((entry) => entry["Student Name"]); // Filter out empty rows
 }
 
+// Fetch and combine data from all sheet URLs
+async function fetchAndCombineSheets(urls) {
+  const allData = [];
+  for (const url of urls) {
+    const sheetData = await fetchSheetData(url);
+    allData.push(...sheetData); // Merge data into a single array
+  }
+  return allData;
+}
 
-// Update events with student data from Google Sheets
-async function updateEventsWithData() {
-  const studentData = await fetchStudentData();
+// Update events with combined data
+async function updateEventsWithCombinedData() {
+  const combinedData = await fetchAndCombineSheets(sheetUrls);
+  console.log("Combined Data:", combinedData); // Debugging log
 
-  studentData.forEach((entry) => {
+  combinedData.forEach((entry) => {
     const { "Event Type": eventType, Category, "Student Name": studentName, Performance } = entry;
 
-    if (eventType && Category) {
+    if (eventType && Category && studentName) {
       const eventTypeObj = events.find((event) => event.type === eventType);
       if (eventTypeObj) {
         const categoryObj = eventTypeObj.events.find((event) => event.category === Category);
         if (categoryObj) {
           // Add the student's name if not already present
-          if (studentName) {
-            const existingStudent = categoryObj.students.find(
-              (student) => student.name === studentName
-            );
-            if (!existingStudent) {
-              categoryObj.students.push({ name: studentName, performance: "" });
-            }
+          const existingStudent = categoryObj.students.find(
+            (student) => student.name === studentName
+          );
+          if (!existingStudent) {
+            categoryObj.students.push({ name: studentName, performance: "" });
           }
 
           // Update performance for an existing student
@@ -205,9 +220,8 @@ async function updateEventsWithData() {
       }
     }
   });
-
-  console.log("Updated Events with Data:", events); // For debugging
 }
+
 
 
 
@@ -384,7 +398,7 @@ studentSearchInput.addEventListener("input", (e) => {
 
 
 window.onload = async function () {
-  await updateEventsWithData(); // Ensure events are updated
-  displayEvents(); // Render events after data is loaded
+  await updateEventsWithCombinedData(); // Fetch and update events with combined data
+  displayEvents(); // Render the events with updated data
 };
 
