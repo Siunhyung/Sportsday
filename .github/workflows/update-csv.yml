@@ -1,9 +1,7 @@
-#update file
 name: Update CSV Data
 
 on:
   schedule:
-    # Run every 5 minutes
     - cron: "*/5 * * * *"
   push:
     paths-ignore:
@@ -24,14 +22,10 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Initialize package.json
-        run: npm init -y
-
       - name: Fetch and update CSV
         run: |
           cat << 'EOF' > update-csv.mjs
           import fs from "fs";
-          import fetch from "node-fetch";
 
           const sheetUrls = [
             "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ71cmK0yXGZ0YUSfdGXWKoQ1Spnw_wDI4Lh3x3xdCnGi37nd4WvAjTnpAMj58ngTsQzPi8xnjECTF-/pub?gid=2141987583&single=true&output=csv",
@@ -43,7 +37,7 @@ jobs:
             for (const url of sheetUrls) {
               const response = await fetch(url);
               if (!response.ok) {
-                throw new Error(`Failed to fetch: ${url}, status: ${response.status}`);
+                throw new Error(\`Failed to fetch: \${url}, status: \${response.status}\`);
               }
               const csvData = await response.text();
               allData.push(csvData);
