@@ -70,5 +70,25 @@ jobs:
           git push
 
 
+      - name: Create script
+        run: |
+          cat << 'EOF' > update-csv.mjs
+          import fs from "fs";
+          const sheetUrls = [/* URLs */];
+          async function fetchAndCombineSheets() {/* implementation */}
+          async function updateCSVFile() {
+            const combinedCSV = await fetchAndCombineSheets();
+            fs.writeFileSync("combined_data.csv", combinedCSV, "utf8");
+          }
+          updateCSVFile().catch(console.error);
+          EOF
+
+      - name: Log directory contents
+        run: ls -al
+
+      - name: Run script
+        run: node update-csv.mjs
+
       - name: Clean up
-        run: rm update-csv.mjs
+        run: rm -f update-csv.mjs
+
