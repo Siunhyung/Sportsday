@@ -1,8 +1,6 @@
 // Comprehensive list of events, times, and placeholders for student data
 
-const sheetUrls = ["https://docs.google.com/spreadsheets/d/e/2PACX-1vQ3fjlsr4BAzZ-ScMJGiPuD9iAHll0SKQXoD_tPy4Ni5RFKxh4I0arzZ4xGN014gQ/pub?gid=2141987583&single=true&output=csv",
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vT894e2E034w4CRm9KmFhzwqABYfTf2oK3BYhC0K4-5u5J1DpLMI70lxNSwCnAqkw/pub?gid=1704478371&single=true&output=csv",
-  ];
+const localCsvUrl = "https://siunhyung.github.io/Sportsday/combined_data.csv";
 const events = [
   {
     type: "Shot Putt",
@@ -145,50 +143,23 @@ const studentPanelTitle = document.getElementById("studentPanelTitle");
 const studentPanelList = document.getElementById("studentPanelList");
 const closePanelButton = document.getElementById("closePanel");
 
-// Fetch data from a single Google Sheet URL
-async function fetchSheetData(url) {
+async function fetchLocalData() {
   try {
-    const response = await fetch(url);
+    const response = await fetch(localCsvUrl);
     if (!response.ok) throw new Error(`Failed to fetch: ${response.statusText}`);
     const csvData = await response.text();
     return parseCSV(csvData);
   } catch (error) {
-    console.error(`Error fetching data from ${url}:`, error);
-    return []; // Return an empty array for failed fetches
+    console.error("Error fetching local CSV data:", error);
+    return [];
   }
 }
 
-// Parse CSV data into an array of objects
-function parseCSV(data) {
-  const rows = data.split("\n");
-  const headers = rows[0].split(",");
 
-  return rows.slice(1).map((row) => {
-    const values = row.split(",");
-    const entry = {};
-    headers.forEach((header, index) => {
-      entry[header.trim()] = values[index]?.trim() || "";
-    });
-    return entry;
-  }).filter((entry) => entry["Student Name"]); // Filter out empty rows
-}
+async function updateEventsWithLocalData() {
+  const localData = await fetchLocalData();
 
-// Fetch and combine data from all sheet URLs
-async function fetchAndCombineSheets(urls) {
-  const allData = [];
-  for (const url of urls) {
-    const sheetData = await fetchSheetData(url);
-    allData.push(...sheetData); // Merge data into a single array
-  }
-  return allData;
-}
-
-// Update events with combined data
-async function updateEventsWithCombinedData() {
-  const combinedData = await fetchAndCombineSheets(sheetUrls);
-  console.log("Combined Data:", combinedData); // Debugging log
-
-  combinedData.forEach((entry) => {
+  localData.forEach((entry) => {
     const { "Event Type": eventType, Category, "Student Name": studentName, Performance } = entry;
 
     if (eventType && Category && studentName) {
@@ -196,15 +167,12 @@ async function updateEventsWithCombinedData() {
       if (eventTypeObj) {
         const categoryObj = eventTypeObj.events.find((event) => event.category === Category);
         if (categoryObj) {
-          // Add the student's name if not already present
           const existingStudent = categoryObj.students.find(
             (student) => student.name === studentName
           );
           if (!existingStudent) {
             categoryObj.students.push({ name: studentName, performance: "" });
           }
-
-          // Update performance for an existing student
           if (Performance) {
             const studentToUpdate = categoryObj.students.find(
               (student) => student.name === studentName
@@ -398,7 +366,8 @@ studentSearchInput.addEventListener("input", (e) => {
 
 
 window.onload = async function () {
-  await updateEventsWithCombinedData(); // Fetch and update events with combined data
+  await updateEventsWithLocalData(); // Fetch and update events with local data
   displayEvents(); // Render the events with updated data
 };
+
 
