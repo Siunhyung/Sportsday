@@ -143,6 +143,26 @@ const studentPanelTitle = document.getElementById("studentPanelTitle");
 const studentPanelList = document.getElementById("studentPanelList");
 const closePanelButton = document.getElementById("closePanel");
 
+
+function parseCSV(data) {
+  const rows = data.split("\n");
+  const headers = rows[0].split(",");
+
+  const parsedData = rows.slice(1).map((row) => {
+    const values = row.split(",");
+    const entry = {};
+    headers.forEach((header, index) => {
+      entry[header.trim()] = values[index]?.trim() || ""; // Handle missing values
+    });
+    return entry;
+  });
+
+  // Filter out empty rows
+  return parsedData.filter((entry) => Object.values(entry).some((value) => value));
+}
+
+
+
 async function fetchLocalData() {
   try {
     const response = await fetch(localCsvUrl);
