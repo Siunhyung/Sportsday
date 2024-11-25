@@ -10,32 +10,32 @@ jobs:
   update-csv:
     runs-on: ubuntu-latest
     steps:
-      # Checkout the repository
+      # Step 1: Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Set up Node.js (using version 20)
+      # Step 2: Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "20"
+          node-version: "20" # Ensure compatibility with modern Node.js
 
-      # Install dependencies
+      # Step 3: Install dependencies
       - name: Install node-fetch
         run: npm install node-fetch
 
-      # Create and execute the ES Module script
+      # Step 4: Create and execute the ES Module script
       - name: Fetch and update CSV
         run: |
           cat << 'EOF' > update-csv.mjs
           import fs from "fs";
           import fetch from "node-fetch";
-      
+
           const sheetUrls = [
             "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ71cmK0yXGZ0YUSfdGXWKoQ1Spnw_wDI4Lh3x3xdCnGi37nd4WvAjTnpAMj58ngTsQzPi8xnjECTF-/pub?gid=2141987583&single=true&output=csv",
             "https://docs.google.com/spreadsheets/d/e/2PACX-1vRAFJZ1rtuVXzF3ASfcr4Ze966Fqt8NzilKWOyJT8tpR5mUgprT9r3P1jlebPTEDLhd3jx0kMJYsn22/pub?gid=1704478371&single=true&output=csv"
           ];
-      
+
           async function fetchAndCombineSheets() {
             const allData = [];
             for (const url of sheetUrls) {
@@ -45,18 +45,18 @@ jobs:
             }
             return allData.join("\\n"); // Combine all CSV data into one string
           }
-      
+
           async function updateCSVFile() {
             const combinedCSV = await fetchAndCombineSheets();
             fs.writeFileSync("combined_data.csv", combinedCSV, "utf8"); // Overwrite the file
             console.log("CSV updated successfully!");
           }
-      
+
           updateCSVFile().catch(console.error);
           EOF
           node update-csv.mjs
 
-      # Commit and push changes
+      # Step 5: Commit and push changes
       - name: Commit and push changes
         run: |
           git config --local user.name "GitHub Actions"
