@@ -5,6 +5,7 @@ on:
     # Run every 5 minutes
     - cron: "*/5 * * * *"
   workflow_dispatch: # Allows manual triggering
+
 jobs:
   update-csv:
     runs-on: ubuntu-latest
@@ -13,11 +14,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Install Node.js
+      # Use Node.js 20 explicitly
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: "20" # Explicitly specify Node.js 20
 
       # Install dependencies and fetch CSV data
       - name: Fetch and update CSV
@@ -44,7 +45,7 @@ jobs:
 
           async function updateCSVFile() {
             const combinedCSV = await fetchAndCombineSheets();
-            fs.writeFileSync('combined_data.csv', combinedCSV, 'utf8');
+            fs.writeFileSync('combined_data.csv', combinedCSV, 'utf8'); // Overwrite the file
             console.log('CSV updated successfully!');
           }
 
