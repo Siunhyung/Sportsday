@@ -37,7 +37,7 @@ jobs:
             for (const url of sheetUrls) {
               const response = await fetch(url);
               if (!response.ok) {
-                throw new Error(\`Failed to fetch: \${url}, status: \${response.status}\`);
+                throw new Error("Failed to fetch: " + url + ", status: " + response.status);
               }
               const csvData = await response.text();
               allData.push(csvData);
