@@ -1,0 +1,61 @@
+name: Update CSV Data
+
+on:
+  schedule:
+    # Run every 5 minutes
+    - cron: "*/5 * * * *"
+
+jobs:
+  update-csv:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Install Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+
+      # Install dependencies and fetch CSV data
+      - name: Fetch and update CSV
+        run: |
+          npm install node-fetch fs
+          node <<EOF
+          const fs = require('fs');
+          const fetch = require('node-fetch');
+
+          const sheetUrls = [
+            "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ71cmK0yXGZ0YUSfdGXWKoQ1Spnw_wDI4Lh3x3xdCnGi37nd4WvAjTnpAMj58ngTsQzPi8xnjECTF-/pub?gid=2141987583&single=true&output=csv",
+            "https://docs.google.com/spreadsheets/d/e/2PACX-1vRAFJZ1rtuVXzF3ASfcr4Ze966Fqt8NzilKWOyJT8tpR5mUgprT9r3P1jlebPTEDLhd3jx0kMJYsn22/pub?gid=1704478371&single=true&output=csv",
+          ];
+
+          async function fetchAndCombineSheets() {
+            const allData = [];
+            for (const url of sheetUrls) {
+              const response = await fetch(url);
+              const csvData = await response.text();
+              allData.push(csvData); // Append each sheet's CSV data
+            }
+            return allData.join("\\n"); // Combine all CSV data into one string
+          }
+
+          async function updateCSVFile() {
+            const combinedCSV = await fetchAndCombineSheets();
+            fs.writeFileSync('combined_data.csv', combinedCSV, 'utf8');
+            console.log('CSV updated successfully!');
+          }
+
+          updateCSVFile().catch(console.error);
+          EOF
+
+      # Commit and push changes
+      - name: Commit and push changes
+        run: |
+          git config --local user.name "GitHub Actions"
+          git config --local user.email "actions@github.com"
+          git add combined_data.csv
+          git commit -m "Update combined_data.csv [skip ci]" || echo "No changes to commit"
+          git push
