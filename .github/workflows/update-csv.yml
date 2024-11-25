@@ -55,14 +55,20 @@ jobs:
           EOF
           node update-csv.mjs
 
+      - name: Stash changes
+        run: git stash --include-untracked
+
+      - name: Pull changes
+        run: git pull --rebase
+
       - name: Commit and push changes
         run: |
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
-          git pull --rebase
           git add combined_data.csv
           git commit -m "Update combined_data.csv [skip ci]" || echo "No changes to commit"
           git push
+
 
       - name: Clean up
         run: rm update-csv.mjs
