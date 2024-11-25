@@ -4,28 +4,29 @@ name: Update CSV Data
 on:
   schedule:
     # Run every 5 minutes
-    - cron: "*/1 * * * *"
+    - cron: "*/5 * * * *"
+  push:
+    paths-ignore:
+      - combined_data.csv
 
+permissions:
+  contents: write
 
 jobs:
   update-csv:
     runs-on: ubuntu-latest
     steps:
-      # Step 1: Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "20" # Ensure compatibility with modern Node.js
+          node-version: "20"
 
-      # Step 3: Install dependencies
-      - name: Install node-fetch
-        run: npm install node-fetch
+      - name: Initialize package.json
+        run: npm init -y
 
-      # Step 4: Create and execute the ES Module script
       - name: Fetch and update CSV
         run: |
           cat << 'EOF' > update-csv.mjs
@@ -41,15 +42,18 @@ jobs:
             const allData = [];
             for (const url of sheetUrls) {
               const response = await fetch(url);
+              if (!response.ok) {
+                throw new Error(`Failed to fetch: ${url}, status: ${response.status}`);
+              }
               const csvData = await response.text();
-              allData.push(csvData); // Append each sheet's CSV data
+              allData.push(csvData);
             }
-            return allData.join("\\n"); // Combine all CSV data into one string
+            return allData.join("\\n");
           }
 
           async function updateCSVFile() {
             const combinedCSV = await fetchAndCombineSheets();
-            fs.writeFileSync("combined_data.csv", combinedCSV, "utf8"); // Overwrite the file
+            fs.writeFileSync("combined_data.csv", combinedCSV, "utf8");
             console.log("CSV updated successfully!");
           }
 
@@ -57,11 +61,14 @@ jobs:
           EOF
           node update-csv.mjs
 
-      # Step 5: Commit and push changes
       - name: Commit and push changes
         run: |
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
+          git pull --rebase
           git add combined_data.csv
           git commit -m "Update combined_data.csv [skip ci]" || echo "No changes to commit"
           git push
+
+      - name: Clean up
+        run: rm update-csv.mjs
