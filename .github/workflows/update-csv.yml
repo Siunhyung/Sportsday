@@ -14,20 +14,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Use Node.js 20 explicitly
+      # Set up Node.js (using version 20)
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "20" # Explicitly specify Node.js 20
+          node-version: "20"
 
-      # Install dependencies and fetch CSV data
+      # Install dependencies
+      - name: Install node-fetch
+        run: npm install node-fetch
+
+      # Create and execute the ES Module script
       - name: Fetch and update CSV
         run: |
-          npm install node-fetch fs
-          node <<EOF
-          const fs = require('fs');
-          const fetch = require('node-fetch');
-
+          echo 'import fs from "fs";' > update-csv.mjs
+          echo 'import fetch from "node-fetch";' >> update-csv.mjs
+          echo '
           const sheetUrls = [
             "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ71cmK0yXGZ0YUSfdGXWKoQ1Spnw_wDI4Lh3x3xdCnGi37nd4WvAjTnpAMj58ngTsQzPi8xnjECTF-/pub?gid=2141987583&single=true&output=csv",
             "https://docs.google.com/spreadsheets/d/e/2PACX-1vRAFJZ1rtuVXzF3ASfcr4Ze966Fqt8NzilKWOyJT8tpR5mUgprT9r3P1jlebPTEDLhd3jx0kMJYsn22/pub?gid=1704478371&single=true&output=csv",
@@ -45,12 +47,13 @@ jobs:
 
           async function updateCSVFile() {
             const combinedCSV = await fetchAndCombineSheets();
-            fs.writeFileSync('combined_data.csv', combinedCSV, 'utf8'); // Overwrite the file
-            console.log('CSV updated successfully!');
+            fs.writeFileSync("combined_data.csv", combinedCSV, "utf8"); // Overwrite the file
+            console.log("CSV updated successfully!");
           }
 
           updateCSVFile().catch(console.error);
-          EOF
+          ' >> update-csv.mjs
+          node update-csv.mjs
 
       # Commit and push changes
       - name: Commit and push changes
